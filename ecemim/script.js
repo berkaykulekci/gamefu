@@ -64,14 +64,21 @@ var init = function () {
     let arrowsFired = 0; 
 
     // Giriş Pop-up'ı Kontrolü
-    document.getElementById('start-btn').addEventListener('click', function() {
+    const startBtn = document.getElementById('start-btn');
+    const startAction = function(e) {
+        if (e) e.preventDefault();
+        if (gameState !== 'intro') return; // Birden fazla kez tetiklenmesini önle
+        
         const overlay = document.getElementById('intro-overlay');
         overlay.style.opacity = '0';
         setTimeout(() => {
             overlay.style.display = 'none';
             gameState = 'playing';
         }, 500);
-    });
+    };
+
+    startBtn.addEventListener('click', startAction);
+    startBtn.addEventListener('touchend', startAction);
 
     function updateMouse(e) {
         mouseX = e.clientX * inputKoef;
