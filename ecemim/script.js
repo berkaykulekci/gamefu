@@ -181,7 +181,7 @@ var init = function () {
             let tx = kx * pointsOrigin[i][0] * koef + width / 2;
             let ty = ky * pointsOrigin[i][1] * koef + height / 2;
 
-            if (gameState === 'playing') {
+            if (gameState === 'playing' || gameState === 'intro') {
                 let distToMouse = Math.hypot(tx - mouseX, ty - mouseY);
                 let mouseInf = Math.max(0, 300 * koef - distToMouse) / (300 * koef);
                 if (mouseInf > 0 && !isDragging) {
@@ -542,7 +542,7 @@ var init = function () {
         // KATMAN 2 (İz Bırakmayan Oyun Objeleri İçin Temizleme)
         ctx2.clearRect(0, 0, width, height);
 
-        if (gameState === 'playing') {
+        if (gameState === 'playing' || gameState === 'intro') {
             var n = -Math.cos(time);
             var currentScale = (1 + n) * .5;
             pulse(currentScale, currentScale);
@@ -581,9 +581,12 @@ var init = function () {
                     ctx.fillRect(u.trace[k].x, u.trace[k].y, 1, 1);
                 }
             }
+        }
 
+        if (gameState === 'playing') {
             // Oyun Objeleri (Fizik Güncellemeleri Önce Yapılır)
             myTargetHeart.update();
+            // ... (rest of the playing logic remains the same)
 
             if (arrow.active) {
                 arrow.update();
