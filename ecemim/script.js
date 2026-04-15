@@ -501,7 +501,7 @@ var init = function () {
 
     function drawText(context) {
         context.save();
-        let fontSize = (mobile ? 25 : 60) * inputKoef;
+        let fontSize = (mobile ? 20 : 50) * inputKoef;
         context.font = `bold ${fontSize}px 'Georgia', serif`;
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -511,7 +511,6 @@ var init = function () {
         let alphaScale = (Math.sin(Date.now() / 300) + 1) / 2 * 0.5 + 0.5;
         context.globalAlpha = alphaScale;
 
-        // Saate göre mesaj mantığı
         let hour = new Date().getHours();
         let message = "Kalbimi tam 12'den vurdun. Seni Çok Seviyorum Bir Tanem";
         if (hour >= 20 || hour < 6) {
@@ -522,11 +521,28 @@ var init = function () {
             message = "Kalbimi tam 12'den vurdun. Aferin sevgilim başardın seni tekrar bekliyorum";
         }
 
-        // Çok Satırlı Yazdırma (Ekrandan taşmaması için noktalardan bölüyoruz)
-        let lines = message.split('. ');
+        // OTOMATİK SATIR SARMA (WORD WRAP) LANTIĞI
+        const maxWidth = width * 0.85; // Ekranın %85'ini kullan
+        const words = message.split(' ');
+        let lines = [];
+        let currentLine = words[0];
+
+        for (let j = 1; j < words.length; j++) {
+            let testLine = currentLine + " " + words[j];
+            let metrics = context.measureText(testLine);
+            if (metrics.width > maxWidth && j > 0) {
+                lines.push(currentLine);
+                currentLine = words[j];
+            } else {
+                currentLine = testLine;
+            }
+        }
+        lines.push(currentLine);
+
+        // Satırları dikeyde ortalayarak yazdır
         lines.forEach((line, index) => {
-            let yOffset = (index - (lines.length - 1) / 2) * (fontSize * 1.2);
-            context.fillText(line + (index < lines.length - 1 ? "." : ""), width / 2, height / 2 + yOffset);
+            let yOffset = (index - (lines.length - 1) / 2) * (fontSize * 1.3);
+            context.fillText(line, width / 2, height / 2 + yOffset);
         });
         context.restore();
     }
