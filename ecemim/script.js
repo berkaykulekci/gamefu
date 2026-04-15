@@ -501,7 +501,7 @@ var init = function () {
 
     function drawText(context) {
         context.save();
-        let fontSize = (mobile ? 35 : 60) * inputKoef;
+        let fontSize = (mobile ? 25 : 60) * inputKoef;
         context.font = `bold ${fontSize}px 'Georgia', serif`;
         context.textAlign = "center";
         context.textBaseline = "middle";
